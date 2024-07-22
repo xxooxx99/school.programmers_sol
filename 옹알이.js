@@ -1,6 +1,6 @@
 // 1 ≤ babbling의 길이 ≤ 100
 // 1 ≤ babbling[i]의 길이 ≤ 30
-// 문자열은 알파벳 소문자로만 이루어져 있습니다.
+// 문자열은 알파벳 소문자로만 이루어져 있음
 
 function Restriction(babbling){
     if(babbling.length < 1 || babbling.length > 100) return false; //배멸 babbling의 문자 개수는 1이상 100개 이하
@@ -13,7 +13,7 @@ function Restriction(babbling){
 
 function solution(babbling){
     if(!Restriction(babbling)){
-        throw new Error("RESTRICTION VIOLATION"); //제한 조거 위반시 에러문 출력
+        throw new Error("RESTRICTION VIOLATION"); 
     }
     let pronoun =["aya", "ye", "woo", "ma"]
     let count = 0;
@@ -21,11 +21,18 @@ function solution(babbling){
     //include로 babbling의 단어가 pronoun에 있는 단어들로만 이루어져있는지 확인
     let word = babbling[i];
     let isValid = true;
+    let previousPronoun ="";
+
     while (word.length > 0) {
         let found = false;
         for(let j = 0; j< pronoun.length; j++) {
             if (word.startsWith(pronoun[j])) {
+                if(previousPronoun === pronoun[j]){
+                    isValid = false;
+                    break;
+                }
                 word = word.slice(pronoun[j].length);
+                previousPronoun = pronoun[j];
                 found = true;
                 break;
         }
@@ -43,4 +50,5 @@ function solution(babbling){
 
 }
 
-console.log(solution([["ayaye", "uuu", "yeye"]]));
+console.log(solution(["aya", "yee", "u", "maa"]));
+console.log(solution(["ayaye", "uuu", "yeye", "yemawoo", "ayaayaa"]));
