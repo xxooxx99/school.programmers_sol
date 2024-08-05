@@ -33,33 +33,45 @@ function solution(n, lost, reserve) {
         throw new Error("Restriction error");
     }
 
-    // reserve와 lost에 중복되는 값을 제거
-    let newReserve = reserve.filter(r => !lost.includes(r));
-    let newLost = lost.filter(l => !reserve.includes(l));
+    // 여벌 체육복을 가진 학생이 도난당한 경우 처리
+    let actualReserve = reserve.filter(r => !lost.includes(r));
+    let actualLost = lost.filter(l => !reserve.includes(l));
 
-    var answer = 0;
-    var usedReserve = new Set();
+    // 여벌 체육복을 가진 학생들 목록을 정렬
+    actualReserve.sort((a, b) => a - b);
 
-    // 새로운 lost 배열을 순회하며 빌려줄 수 있는 학생을 찾음
-    for (let i = 0; i < newLost.length; i++) {
-        let lostStudent = newLost[i];
+    let answer = n - actualLost.length; // 기본 참석 가능한 학생 수
 
-        if (newReserve.includes(lostStudent - 1) && !usedReserve.has(lostStudent - 1)) {
+    for (let i = 0; i < actualReserve.length; i++) {
+        let reserveStudent = actualReserve[i];
+
+        // 앞 번호 학생이 먼저 빌려줄 수 있도록 처리
+        if (actualLost.includes(reserveStudent - 1)) {
+            actualLost = actualLost.filter(l => l !== reserveStudent - 1);
             answer++;
-            usedReserve.add(lostStudent - 1);
-        } else if (newReserve.includes(lostStudent + 1) && !usedReserve.has(lostStudent + 1)) {
+        } else if (actualLost.includes(reserveStudent + 1)) {
+            actualLost = actualLost.filter(l => l !== reserveStudent + 1);
             answer++;
-            usedReserve.add(lostStudent + 1);
         }
     }
 
-    let attend = n - newLost.length + answer;
-    return attend;
+    return answer;
 }
 
 // 예제
-const n = 5;
-const lost = [2, 4];
-const reserve = [1, 3, 5];
+const n1 = 5;
+const lost1 = [2, 4];
+const reserve1 = [1, 3, 5];
 
-console.log(solution(n, lost, reserve)); 
+console.log(solution(n1, lost1, reserve1)); 
+const n2 = 5;
+const lost2 = [2, 4];
+const reserve2 = [3];
+
+console.log(solution(n2, lost2, reserve2)); 
+
+const n3 = 3;
+const lost3 = [3];
+const reserve3 = [1];
+
+console.log(solution(n3, lost3, reserve3)); 
